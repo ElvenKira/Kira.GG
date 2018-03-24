@@ -87,11 +87,13 @@ if (mongoURL == null && databaseServiceName) {
   }
 }
 
+console.log("before trying to connect");
 MongoClient.connect(mongoURL, function(err, db) {
   console.log("\n\nMONGO URL: " + mongoURL);
   if (err) {
     console.log("\nError: " + String(err));
   } else {
+    console.log("Connected succesfully");
     app.db = db.db(mongoDatabase);
 
     app.listen(PORT, () => {

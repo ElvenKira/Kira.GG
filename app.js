@@ -61,6 +61,10 @@ var PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     mongoURLLabel = "",
     databaseServiceName = process.env.DATABASE_SERVICE_NAME || 'MONGODB';
 
+    console.log("PORT: " + PORT);
+    console.log("IP: " + IP);
+    console.log("mongoURL: " + mongoURL);
+    console.log("databaseServiceName: " + databaseServiceName);
 if (mongoURL == null && databaseServiceName) {
   var mongoServiceName = databaseServiceName.toUpperCase(),
       mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'] || 'localhost',

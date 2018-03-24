@@ -7,7 +7,7 @@ const DB_PASSWORD = "saphire6.";
 const DB_URL      = "mongodb://localhost:27017";
 const LOL_VERSION = "8.4.1";
 const DRAGONTAIL_URL = "https://ddragon.leagueoflegends.com/cdn/dragontail-" + LOL_VERSION + ".tgz";
-const RIOT_KEY = "RGAPI-883ebbe0-bc90-4890-ae37-0f5b04831f35";
+const RIOT_KEY = "RGAPI-e208770e-2fbe-454f-8428-26214c96b5a6";
 const REGION = "la2";
 const BASE_URL                = "https://" + REGION + ".api.riotgames.com";
 const URL_CHAMPIONS           = BASE_URL + "/lol/static-data/v3/champions?locale=en_US&champListData=all&tags=all&dataById=false";

@@ -1,0 +1,46 @@
+extends layout.pug
+
+block content
+		header
+			nav(class="navbar navbar-toggleable-md navbar-light bg-faded")
+				h1 Kira.GG
+				button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+				form(action="/summoner/data" method="post" class="form-inline")
+					input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
+					button(type="submit" class="btn btn-primary") Search
+		main
+			div(class="container")
+				div(class="row summoner-info")
+					div(class="summoner-container")
+						div(class="summoner-icon")
+							img(src="http://ddragon.leagueoflegends.com/cdn/8.4.1/img/profileicon/" + data.summoner.profileIconId + ".png" width=160 height=160)
+					div(class="summoner-name")
+						h2(title="Account ID=" + data.summoner.accountId) #{ data.summoner.name }
+					div(class="summoner-level")
+						h2 Level #{ data.summoner.summonerLevel }
+					
+						
+				table(class="table")
+					thead
+						th Picture
+						th Champion ID
+						th Champion Level
+						th Champion Points
+						th Last Play Time
+						th Champion Points Since Last Level
+						th Champion Points Until Next Level
+						th Chest Granted
+						th Tokens Earned
+					tbody
+						each entry, i in data.mastery
+							tr
+								td
+									img(src="http://ddragon.leagueoflegends.com/cdn/8.3.1/img/champion/" + data.champions.keys[entry.championId] + ".png" class="ChampionImage")
+								td #{ entry.championId }
+								td #{ entry.championLevel }
+								td #{ entry.championPoints }
+								td #{ entry.lastPlayTime } 
+								td #{ entry.championPointsSinceLastLevel }
+								td #{ entry.championPointsUntilNextLevel }
+								td #{ entry.chestGranted }
+								td #{ entry.tokensEarned }

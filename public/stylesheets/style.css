@@ -1,0 +1,60 @@
+body {
+  /*padding: 50px;*/
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+header {
+  background-color: #0F1525;
+}
+
+/* Summoner Info */
+.summoner-info {
+  background-color: #0F1525;
+  border-radius: 16px;
+  background-image: url("../images/champion/tiles/Velkoz_0.jpg");
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
+.summoner-container {
+  position: relative;
+}
+.summoner-icon {
+  padding-left: 20px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  display: block;
+}
+
+.summoner-name {
+  padding-left: 20px;
+  display: block;
+}
+
+.summoner-level {
+  padding-left: 20px;
+  display: block;
+}
+
+/*
+.summoner-level {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  background-color: #181D2B;
+  margin-top: -12px;
+  margin-left: -10px;
+}
+*/
+/* End Summoner Info */
+
+a {
+  color: #00B7FF;
+}
+
+select {
+  color: white;
+  background-color: #252830;
+  line-height: 1.5;
+  padding: 0.375rem 0.75rem;
+}

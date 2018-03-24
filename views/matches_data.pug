@@ -1,0 +1,140 @@
+extends layout.pug
+
+block content
+		header
+			nav(class="navbar navbar-toggleable-md navbar-light bg-faded")
+				h1 Kira.GG
+				button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+				form(action="/summoner/data" method="post" class="form-inline")
+					input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
+					button(type="submit" class="btn btn-primary") Search
+		main
+			div(class="container")
+				div(class="row summoner-info")
+					div(class="summoner-container")
+						div(class="summoner-icon")
+							img(src="http://ddragon.leagueoflegends.com/cdn/8.4.1/img/profileicon/" + data.summoner.profileIconId + ".png" width=160 height=160)
+					div(class="summoner-name")
+						h2(title="Account ID=" + data.summoner.accountId) #{ data.summoner.name }
+					div(class="summoner-level")
+						h2 Level #{ data.summoner.summonerLevel }
+					
+				div(class="row")
+					table(class="table")
+						thead
+							th -
+							- var n = 1
+							- var keys = Object.keys(data.match_detail).sort()
+							while n < matches + 1
+								th= n++
+						tbody
+							tr
+								td Champion
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ champions.keys[entry.participants[j].championId]}
+												
+									else
+										td -
+							tr
+								td Game Lenght
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ Math.floor( entry.gameDuration / 60) }:#{ entry.gameDuration % 60}
+									else
+										td -
+							
+							tr
+								td Kills
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.kills}
+									else
+										td -
+
+							tr
+								td Deaths
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.deaths}
+									else
+										td -
+
+							tr
+								td Assists
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.assists}
+									else
+										td -
+
+							tr
+								td Gold
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.goldEarned}
+									else
+										td -
+
+							tr
+								td CS
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled}
+									else
+										td -
+
+							tr
+								td CS/Min
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ ((entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled) / (entry.gameDuration / 60)).toLocaleString(undefined, {maximumFractionDigits: 2 })}
+									else
+										td -
+
+
+							tr
+								td Wards<br>Placed
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.wardsPlaced}
+									else
+										td -
+
+							tr
+								td Control<br>Wards
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.visionWardsBoughtInGame}
+									else
+										td -

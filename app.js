@@ -87,8 +87,7 @@ if (mongoURL == null && databaseServiceName) {
   }
 }
 
-//MongoClient.connect(mongoURL, function(err, db) {
-MongoClient.connect("mongodb://mongodbuser:mongodbpass@ds223509.mlab.com:23509/kira_gg", function(err, db) {
+MongoClient.connect(mongoURL, function(err, db) {
   console.log("\n\nMONGO URL: " + mongoURL);
   if (err) {
     console.log("\nError: " + String(err));

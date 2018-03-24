@@ -82,25 +82,25 @@ if (mongoURL == null && databaseServiceName) {
 		
 		mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
 		mongoURL += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
-
-		MongoClient.connect(mongoURL, function(err, db) {
-      console.log("\n\nMONGO URL: " + mongoURL);
-      if (err) {
-        console.log("\nError: " + String(err));
-      } else {
-        app.db = db.db(mongoDatabase);
-
-        /*
-        app.db.collection('champions').findOne({}, function(err, data_champions) {
-          console.log(data_champions);
-        });
-        */
-        app.listen(PORT, () => {
-          console.log("Server running on http://%s:%s", IP, PORT);
-        });
-      }
-    });
   }
+  
+  MongoClient.connect(mongoURL, function(err, db) {
+    console.log("\n\nMONGO URL: " + mongoURL);
+    if (err) {
+      console.log("\nError: " + String(err));
+    } else {
+      app.db = db.db(mongoDatabase);
+
+      /*
+      app.db.collection('champions').findOne({}, function(err, data_champions) {
+        console.log(data_champions);
+      });
+      */
+      app.listen(PORT, () => {
+        console.log("Server running on http://%s:%s", IP, PORT);
+      });
+    }
+  });
 }
 
 module.exports = app;

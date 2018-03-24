@@ -59,19 +59,20 @@ var PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     IP   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
     mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
     mongoURLLabel = "",
-    databaseServiceName = process.env.DATABASE_SERVICE_NAME || 'MONGODB';
+    databaseServiceName = process.env.DATABASE_SERVICE_NAME || 'MONGODB',
+    mongoDatabase = process.env.DATABASE_NAME || 'KiraApp';
 
     console.log("PORT: " + PORT);
     console.log("IP: " + IP);
     console.log("mongoURL: " + mongoURL);
     console.log("databaseServiceName: " + databaseServiceName);
 
+
 if (mongoURL == null && databaseServiceName) {
   console.log("Editing mongoURL");
   var mongoServiceName = databaseServiceName.toUpperCase(),
       mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'] || 'localhost',
       mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'] || 27017,
-      mongoDatabase = process.env[mongoServiceName + '_DATABASE'] || 'KiraApp',
       mongoPassword = process.env[mongoServiceName + '_PASSWORD'],
       mongoUser = process.env[mongoServiceName + '_USER'];
 	

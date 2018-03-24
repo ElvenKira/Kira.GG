@@ -92,7 +92,7 @@ if (mongoURL == null && databaseServiceName) {
         });
         */
         app.listen(PORT, () => {
-          console.log("Server running on http://%s:%s", ip, PORT);
+          console.log("Server running on http://%s:%s", IP, PORT);
         });
       }
     });

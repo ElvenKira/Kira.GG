@@ -20,51 +20,70 @@ exports.matches_get_data_by_name = function(req, res, next) {
     var data = {};
     data.match_detail = {};
 
+    // Get Summoner Info
     request(options, function(error_summoner, response_summoner, data_summoner) {
         data.summoner = JSON.parse(data_summoner);
+        
         options.url = config.URL_100_MATCHES_BY_ID;
         options.url = options.url.replace( "{accountId}", data.summoner.accountId);
-        //console.log("options.url after replace: " + options.url);
         
+        // Get latest 100 Matches
         request(options, function(error_matches, response_matches, data_matches) {
             data.matches = JSON.parse(data_matches);
             var match_count = parseInt(matches);
             var count = 0;
             var count_inside = 0;
 
-            console.log("\n\nMatches: " + data.matches.matches.length + "\n\n");
-            // Iterate over each match and look for the match info
-            for (var i = 0; i < data.matches.matches.length; i++) {
+            console.log("\n\nMatches: " + data.matches.matches.length);
+            console.log("Match Count: " + match_count + "\n\n");
+
+
+            // Iterate over each match and look for the match info 
+            for (var i = 0; i < data.matches.matches.length && count < match_count; i++) {
                 if ( data.matches.matches[i].lane.localeCompare(lane) == 0 &&
-                     data.matches.matches[i].queue == 420 && 
-                     count < match_count) {
+                data.matches.matches[i].queue == 420) {
+
+                    var match_detail_option = {
+                        url: config.URL_MATCH_BY_ID, 
+                        headers: {
+                            "X-Riot-Token": config.RIOT_KEY
+                        }
+                    }
 
                     count++;
-                    options.url = config.URL_MATCH_BY_ID;
-                    options.url = options.url.replace( "{matchId}", data.matches.matches[i].gameId);
+                    match_detail_option.url = match_detail_option.url.replace( "{matchId}", data.matches.matches[i].gameId);
+                    console.log(count + ": " + data.matches.matches[i].gameId);
 
-                    get_match_detail(options, function(err, match) {
-                        if (err !== null) {
+                    get_match_detail(match_detail_option, function(err, match) {
+                        if (err) {
+                            console.log("Error: " + String(err));
+                        } else {
                             data.match_detail[match.gameCreation] = match;
-                            if (++count_inside == match_count) {
-                                console.log("Keys inside: " + Object.keys(data.match_detail).length);
+                            console.log("Added already: " + Object.keys(data.match_detail).length + " - gameCreation : " + match.gameCreation);
+                            //if (++count_inside == match_count) {
+                            if (Object.keys(data.match_detail).length == match_count) {
                                 finish_getting_data(); 
                             }
                         }
                     })
                 }
             }
-            
-            function get_match_detail(options, callback) {
-                request(options, function(error_match, response_match, data_match) {
+
+            function get_match_detail(match_detail_option, callback) {
+                request(match_detail_option, function(error_match, response_match, data_match) {
                     var match_obj = JSON.parse(data_match);
+                    
                     if (match_obj.status !== undefined) {
-                        console.log("retrying for " + count_inside);
-                        get_match_detail(options, callback);
+                        setTimeout(function() {
+                            console.log("retrying for " + Object.keys(data.match_detail).length);
+                            console.log("Message: "+ JSON.stringify(match_obj));
+                            console.log("URL: " + match_detail_option.url);
+                            get_match_detail(match_detail_option, callback);
+                        }, 1500)
                     } else {
+                        console.log("on Else: " + match_obj.gameCreation);
                         callback(null, match_obj);
                     }
-                    callback(error_match, null);
                 });
             }
 

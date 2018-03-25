@@ -19,7 +19,7 @@ block content
 					div(class="summoner-level")
 						h2 Level #{ data.summoner.summonerLevel }
 					
-				div(class="row")
+				div(style="overflow-x:scroll;")
 					table(class="table")
 						thead
 							th -
@@ -39,6 +39,17 @@ block content
 												
 									else
 										td -
+							tr
+								td W/L
+								each key in keys
+									- entry = data.match_detail[key]
+									if (entry.participantIdentities !== undefined)
+										each participantIdentity, j in entry.participantIdentities
+											if participantIdentity.player.accountId == data.summoner.accountId
+												td #{ entry.participants[j].stats.win ? "W" : "L" }
+									else
+										td -
+
 							tr
 								td Game Lenght
 								each key in keys

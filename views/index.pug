@@ -4,27 +4,36 @@ block content
 	div(class="container")
 		nav(class="navbar navbar-toggleable-md navbar-light bg-faded")
 			h1 Kira.GG
-			button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
-			form(action="/summoner/data" method="post" class="form-inline")
-				input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
-				select(name="region")
-					option(value="LA1") LAN
-					option(value="LA2") LAS
-				button(type="submit" class="btn btn-primary") Search			
+			//button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+			//form(action="/summoner/data" method="post" class="form-inline")
+			//	input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
+			//	select(name="region")
+			//		option(value="LA1") LAN
+			//		option(value="LA2") LAS
+			//	button(type="submit" class="btn btn-primary") Search			
 			div(class="row")
 				form(action="/matches/" method="post" class="form-inline")
+					label(for="name") Summoner Name:
 					input(type="text" class="form-control" id="name" name="summoner_name" placeholder="Summoner Name" value="xcrow darkness")
-					select(name="lane")
-						option(value="BOTTOM") ADC/Support
-						option(value="MID") Mid
-						option(value="TOP") Top
-						option(value="JUNGLE") Jungle
-					select(name="role")
-						option(value="DUO_CARRY") ADC
-						option(value="DUO_SUPPORT") Support
-						option(value="SOLO") Mid/Top/Jungle
+					
+					label(for="role") Role:
+					select(name="role" id="role")
+						option(value="ADC") ADC
+						option(value="Support") Support
+						option(value="Mid") Mid
+						option(value="Top") Top
+						option(value="Jungle") Jungle
+						option(value="Any") Any
+					
+					label(for="matches") Matches:
 					input(type="text" class="form-control" id="matches" name="matches" placeholder="25" value="25")
-					select(name="region")
+					
+					label(for="date") Until Date:
+					input(type="date" id="date" name="date")
+
+					label(for="region") Region:
+					select(name="region" id="region")
 						option(value="LA2") LAS
 						option(value="LA1") LAN
+
 					button(type="submit" class="btn btn-primary") Search

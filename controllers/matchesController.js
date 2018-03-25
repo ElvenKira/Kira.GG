@@ -89,7 +89,12 @@ exports.matches_get_data_by_name = function(req, res, next) {
 
             function finish_getting_data() {
                 req.app.db.collection('champions').findOne({}, function(err, data_champions) {
-                    console.log("champions: \n" + JSON.stringify(data_champions));
+                    if (err) { 
+                        console.log(String(err));
+                    } else {
+                        console.log("champions: \n" + JSON.stringify(data_champions));
+                    }
+
                     res.render('matches_data', 
                         {
                             'data': data,

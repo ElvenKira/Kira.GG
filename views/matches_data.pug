@@ -25,127 +25,41 @@ block content
 							th -
 							- var n = 1
 							- var keys = Object.keys(data.match_detail).sort()
+							- var headers = ['Champion', 'W/L', 'Game Lenght', 'Kills', 'Deaths', 'Assists', 'Gold', 'CS', 'CS/Min', 'Wards Placed', 'Control Wards'];
 							while n < matches + 1
 								th= n++
 						tbody
-							tr
-								td Champion
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ champions.keys[entry.participants[j].championId]}
-												
-									else
-										td -
-							tr
-								td W/L
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.win ? "W" : "L" }
-									else
-										td -
-
-							tr
-								td Game Lenght
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ Math.floor( entry.gameDuration / 60) }:#{ entry.gameDuration % 60}
-									else
-										td -
-							
-							tr
-								td Kills
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.kills}
-									else
-										td -
-
-							tr
-								td Deaths
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.deaths}
-									else
-										td -
-
-							tr
-								td Assists
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.assists}
-									else
-										td -
-
-							tr
-								td Gold
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.goldEarned}
-									else
-										td -
-
-							tr
-								td CS
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled}
-									else
-										td -
-
-							tr
-								td CS/Min
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ ((entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled) / (entry.gameDuration / 60)).toLocaleString(undefined, {maximumFractionDigits: 2 })}
-									else
-										td -
-
-
-							tr
-								td Wards<br>Placed
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.wardsPlaced}
-									else
-										td -
-
-							tr
-								td Control<br>Wards
-								each key in keys
-									- entry = data.match_detail[key]
-									if (entry.participantIdentities !== undefined)
-										each participantIdentity, j in entry.participantIdentities
-											if participantIdentity.player.accountId == data.summoner.accountId
-												td #{ entry.participants[j].stats.visionWardsBoughtInGame}
-									else
-										td -
+							each header, index_headers in headers
+								tr
+									each key, index_keys in keys
+										if (index_keys == 0)
+											td #{ headers[index_headers] }
+										- entry = data.match_detail[key]
+										if (entry.participantIdentities !== undefined)
+											each participantIdentity, j in entry.participantIdentities
+												if participantIdentity.player.accountId == data.summoner.accountId
+													case index_headers
+														when 0
+															td #{ champions.keys[entry.participants[j].championId]}
+														when 1
+															td #{ entry.participants[j].stats.win ? "W" : "L" }
+														when 2
+															td #{ Math.floor( entry.gameDuration / 60) }:#{ entry.gameDuration % 60}
+														when 3
+															td #{ entry.participants[j].stats.kills}
+														when 4
+															td #{ entry.participants[j].stats.deaths}
+														when 5
+															td #{ entry.participants[j].stats.assists}
+														when 6
+															td #{ entry.participants[j].stats.goldEarned}
+														when 7
+															td #{ entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled}
+														when 8
+															td #{ ((entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled) / (entry.gameDuration / 60)).toLocaleString(undefined, {maximumFractionDigits: 2 })}
+														when 9
+															td #{ entry.participants[j].stats.wardsPlaced}
+														when 10
+															td #{ entry.participants[j].stats.visionWardsBoughtInGame}
+										else
+											td -

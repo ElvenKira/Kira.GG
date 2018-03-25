@@ -30,18 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Initializes routes starting on '/'
 var index = require('./routes/index');
 app.use('/', index);
-/*
-app.use(function(req, res, next) {
-  req.app.db = 
-});
-*/
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  console.log("in the err middleware");
-  next(err);
-});
 
 // error handler
 app.use(function(err, req, res, next) {

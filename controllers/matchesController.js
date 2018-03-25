@@ -17,7 +17,7 @@ exports.matches_get_data_by_name = function(req, res, next) {
             role = "DUO_SUPPORT";
             break;
         case "Mid":
-            lane = "MID";
+            lane = "MIDDLE";
             role = "SOLO";
             break;
         case "Top":
@@ -26,7 +26,7 @@ exports.matches_get_data_by_name = function(req, res, next) {
             break;
         case "Jungle":
             lane = "JUNGLE";
-            role = "SOLO";
+            role = "NONE";
             break;
         case "Any":
             lane = "ANY";
@@ -56,49 +56,57 @@ exports.matches_get_data_by_name = function(req, res, next) {
         // Get latest 100 Matches
         request(options, function(error_matches, response_matches, data_matches) {
             data.matches = JSON.parse(data_matches);
-            var match_count = parseInt(matches);
-            var count = data.matches.matches.length;
-
-            console.log("\n\nMatches: " + data.matches.matches.length);
-            console.log("Match Count: " + match_count + "\n\n");
-
-
-            // Iterate over each match and look for the match info 
-            for (var i = 0; i < data.matches.matches.length; i++) {
-
-                // Check that Role matches
-                if ( 
-                    (lane == "ANY" || 
-                    (
-                        data.matches.matches[i].lane.localeCompare(lane) == 0 &&
-                        data.matches.matches[i].role.localeCompare(role) == 0
-                    )
-                    ) && data.matches.matches[i].queue == 420
-                ) {
-                    var match_detail_option = {
-                        url: config.URL_MATCH_BY_ID, 
-                        headers: {
-                            "X-Riot-Token": config.RIOT_KEY
-                        }
-                    }
-
-                    match_detail_option.url = match_detail_option.url.replace( "{matchId}", data.matches.matches[i].gameId);
-
-                    get_match_detail(match_detail_option, function(err, match) {
-                        
-                        if (err) {
-                            console.log("Error: " + String(err));
-                        } else {
-                            data.match_detail[match.gameCreation] = match;
-
-                            if (Object.keys(data.match_detail).length == match_count || --count == 0) {
-                                finish_getting_data(); 
+            
+            if (data.matches.matches === undefined ) {
+                console.log(JSON.stringify(data.matches));
+                finish_getting_data();
+            } else {
+                var match_count = parseInt(matches);
+                var count = data.matches.matches.length;
+    
+                console.log("\n\nMatches: " + data.matches.matches.length);
+                console.log("Match Count: " + match_count + "\n\n");
+    
+    
+                // Iterate over each match and look for the match info 
+                for (var i = 0; i < data.matches.matches.length; i++) {
+                    console.log("lane: " + data.matches.matches[i].lane + " - role: " + data.matches.matches[i].role);
+                    // Check that Role matches
+                    if ( 
+                        (lane == "ANY" || 
+                        (
+                            data.matches.matches[i].lane.localeCompare(lane) == 0 &&
+                            data.matches.matches[i].role.localeCompare(role) == 0
+                        )
+                        ) && data.matches.matches[i].queue == 420
+                    ) {
+                        var match_detail_option = {
+                            url: config.URL_MATCH_BY_ID, 
+                            headers: {
+                                "X-Riot-Token": config.RIOT_KEY
                             }
                         }
-                    })
-                } else {
-                    if (Object.keys(data.match_detail).length == match_count || --count == 0) {
-                        finish_getting_data(); 
+    
+                        match_detail_option.url = match_detail_option.url.replace( "{matchId}", data.matches.matches[i].gameId);
+    
+                        get_match_detail(match_detail_option, function(err, match) {
+                            
+                            if (err) {
+                                console.log("Error: " + String(err));
+                            } else {
+                                data.match_detail[match.gameCreation] = match;
+    
+                                if (Object.keys(data.match_detail).length == match_count || --count == 0) {
+                                    finish_getting_data(); 
+                                }
+                            }
+                        })
+                    } else {
+                        if (Object.keys(data.match_detail).length == match_count || --count == 0) {
+                            finish_getting_data(); 
+                        } else {
+                            console.log(count);
+                        }
                     }
                 }
             }

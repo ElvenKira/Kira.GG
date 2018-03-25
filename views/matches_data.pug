@@ -24,7 +24,7 @@ block content
 						thead
 							th -
 							- var n = 1
-							- var keys = Object.keys(data.match_detail).sort()
+							- var keys = Object.keys(data.match_detail).sort().reverse();
 							- var headers = ['Champion', 'W/L', 'Game Lenght', 'Kills', 'Deaths', 'Assists', 'Gold', 'CS', 'CS/Min', 'Wards Placed', 'Control Wards', 'Time Ago'];
 							while n < matches + 1
 								th= n++
@@ -32,42 +32,43 @@ block content
 							each header, index_headers in headers
 								tr
 									each key, index_keys in keys
-										if (index_keys == 0)
-											td #{ headers[index_headers] }
-										- entry = data.match_detail[key]
-										if (entry.participantIdentities !== undefined)
-											each participantIdentity, j in entry.participantIdentities
-												if participantIdentity.player.accountId == data.summoner.accountId
-													case index_headers
-														when 0
-															td #{ champions.keys[entry.participants[j].championId]}
-														when 1
-															td #{ entry.participants[j].stats.win ? "W" : "L" }
-														when 2
-															td #{ Math.floor( entry.gameDuration / 60) }:#{ entry.gameDuration % 60}
-														when 3
-															td #{ entry.participants[j].stats.kills}
-														when 4
-															td #{ entry.participants[j].stats.deaths}
-														when 5
-															td #{ entry.participants[j].stats.assists}
-														when 6
-															td #{ entry.participants[j].stats.goldEarned}
-														when 7
-															td #{ entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled}
-														when 8
-															td #{ ((entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled) / (entry.gameDuration / 60)).toLocaleString(undefined, {maximumFractionDigits: 2 })}
-														when 9
-															td #{ entry.participants[j].stats.wardsPlaced}
-														when 10
-															td #{ entry.participants[j].stats.visionWardsBoughtInGame}
-														when 11
-															- var milliseconds = (new Date).getTime() - entry.gameCreation;
-															if ((milliseconds / (1000 * 60 * 60)) < 1)
-																td Less than an hour
-															else if (milliseconds / (1000 * 60 * 60 * 24) > 1)
-																td #{ Math.ceil(milliseconds / (1000 * 60 * 60 * 24)) } days ago
-															else
-																td #{ Math.ceil(((new Date).getTime() - entry.gameCreation) / (1000 * 60 * 60)) } hours ago
-										else
-											td -
+										if (index_keys < matches)	
+											if (index_keys == 0)
+												td #{ headers[index_headers] }
+											- entry = data.match_detail[key]
+											if (entry.participantIdentities !== undefined)
+												each participantIdentity, j in entry.participantIdentities
+													if participantIdentity.player.accountId == data.summoner.accountId
+														case index_headers
+															when 0
+																td #{ champions.keys[entry.participants[j].championId]}
+															when 1
+																td #{ entry.participants[j].stats.win ? "W" : "L" }
+															when 2
+																td #{ Math.floor( entry.gameDuration / 60) }:#{ entry.gameDuration % 60}
+															when 3
+																td #{ entry.participants[j].stats.kills}
+															when 4
+																td #{ entry.participants[j].stats.deaths}
+															when 5
+																td #{ entry.participants[j].stats.assists}
+															when 6
+																td #{ entry.participants[j].stats.goldEarned}
+															when 7
+																td #{ entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled}
+															when 8
+																td #{ ((entry.participants[j].stats.totalMinionsKilled + entry.participants[j].stats.neutralMinionsKilled) / (entry.gameDuration / 60)).toLocaleString(undefined, {maximumFractionDigits: 2 })}
+															when 9
+																td #{ entry.participants[j].stats.wardsPlaced}
+															when 10
+																td #{ entry.participants[j].stats.visionWardsBoughtInGame}
+															when 11
+																- var milliseconds = (new Date).getTime() - entry.gameCreation;
+																if ((milliseconds / (1000 * 60 * 60)) < 1)
+																	td Less than an hour
+																else if (milliseconds / (1000 * 60 * 60 * 24) > 1)
+																	td #{ Math.ceil(milliseconds / (1000 * 60 * 60 * 24)) } days ago
+																else
+																	td #{ Math.ceil(((new Date).getTime() - entry.gameCreation) / (1000 * 60 * 60)) } hours ago
+											else
+												td -

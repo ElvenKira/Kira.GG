@@ -91,14 +91,15 @@ exports.matches_get_data_by_name = function(req, res, next) {
                         } else {
                             data.match_detail[match.gameCreation] = match;
 
-                            --count;
-                            if (Object.keys(data.match_detail).length == match_count || count == 0) {
+                            if (Object.keys(data.match_detail).length == match_count || --count == 0) {
                                 finish_getting_data(); 
                             }
                         }
                     })
                 } else {
-                    --count;
+                    if (Object.keys(data.match_detail).length == match_count || --count == 0) {
+                        finish_getting_data(); 
+                    }
                 }
             }
 
@@ -112,9 +113,8 @@ exports.matches_get_data_by_name = function(req, res, next) {
                         }, 1500)
                     } else if (match_obj.gameCreation >= date) {
                         callback(null, match_obj);
-                    } else { 
-                        --count;
-                        if (Object.keys(data.match_detail).length == match_count || count == 0) {
+                    } else {
+                        if (Object.keys(data.match_detail).length == match_count || --count == 0) {
                             finish_getting_data(); 
                         }
                     }

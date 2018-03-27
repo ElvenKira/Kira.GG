@@ -3,11 +3,12 @@ extends layout.pug
 block content
 		header
 			nav(class="navbar navbar-toggleable-md navbar-light bg-faded")
-				h1 Kira.GG
+				h1 
+					a(href="/") Kira.GG
 				button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
-				form(action="/summoner/data" method="post" class="form-inline")
-					input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
-					button(type="submit" class="btn btn-primary") Search
+				//form(action="/summoner/data" method="post" class="form-inline")
+				//	input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
+				//	button(type="submit" class="btn btn-primary") Search
 		main
 			div(class="container")
 				div(class="row summoner-info")
@@ -18,7 +19,6 @@ block content
 						h2(title="Account ID=" + data.summoner.accountId) #{ data.summoner.name }
 					div(class="summoner-level")
 						h2 Level #{ data.summoner.summonerLevel }
-					
 				div(style="overflow-x:scroll;")
 					table(class="table")
 						thead

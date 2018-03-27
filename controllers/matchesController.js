@@ -1,5 +1,7 @@
 var request = require('request');
 var config = require('../config');
+const keys = require('../config/keys');
+const RIOT_KEY = process.env.RIOT_KEY || keys.RIOT_KEY;
 
 exports.matches_get_data_by_name = function(req, res, next) {
     //var summoner = req.params.summoner_name;
@@ -35,11 +37,13 @@ exports.matches_get_data_by_name = function(req, res, next) {
     }
     
     var matches = req.body.matches;
-    var date = new Date(req.body.date).getTime();
+    var from_date = new Date(req.body.from_date).getTime();
+    var to_date = new Date(req.body.to_date).getTime();
+
     var options = {
         url: config.URL_SUMMONER_BY_NAME + summoner, 
         headers: {
-            "X-Riot-Token": config.RIOT_KEY
+            "X-Riot-Token": RIOT_KEY
         }
     }
 
@@ -52,8 +56,10 @@ exports.matches_get_data_by_name = function(req, res, next) {
         
         options.url = config.URL_100_MATCHES_BY_ID;
         options.url = options.url.replace( "{accountId}", data.summoner.accountId);
+        options.url += "&endTime=" + to_date + "&beginTime=" + from_date + "&queue=420";
+        console.log(options.url);
         
-        // Get latest 100 Matches
+        // Get latest Ranked matches
         request(options, function(error_matches, response_matches, data_matches) {
             data.matches = JSON.parse(data_matches);
             
@@ -69,60 +75,60 @@ exports.matches_get_data_by_name = function(req, res, next) {
     
     
                 // Iterate over each match and look for the match info 
-                for (var i = 0; i < data.matches.matches.length; i++) {
-                    console.log("lane: " + data.matches.matches[i].lane + " - role: " + data.matches.matches[i].role);
-                    // Check that Role matches
-                    if ( 
-                        (lane == "ANY" || 
-                        (
-                            data.matches.matches[i].lane.localeCompare(lane) == 0 &&
-                            data.matches.matches[i].role.localeCompare(role) == 0
-                        )
-                        ) && data.matches.matches[i].queue == 420
-                    ) {
-                        var match_detail_option = {
-                            url: config.URL_MATCH_BY_ID, 
-                            headers: {
-                                "X-Riot-Token": config.RIOT_KEY
-                            }
-                        }
-    
-                        match_detail_option.url = match_detail_option.url.replace( "{matchId}", data.matches.matches[i].gameId);
-    
-                        get_match_detail(match_detail_option, function(err, match) {
-                            
+                for (var i = 0; i < data.matches.matches.length; i++) 
+                {
+                    if (lane == "ANY" || (data.matches.matches[i].lane.localeCompare(lane) == 0 && data.matches.matches[i].role.localeCompare(role) == 0)) 
+                    {
+                        // Get Match Detail
+                        get_match_detail(data.matches.matches[i].gameId, function(err, match) {
                             if (err) {
                                 console.log("Error: " + String(err));
                             } else {
                                 data.match_detail[match.gameCreation] = match;
     
-                                if (Object.keys(data.match_detail).length == match_count || --count == 0) {
+                                if (--count == 0) {
                                     finish_getting_data(); 
-                                }
+                                } 
                             }
-                        })
-                    } else {
-                        if (Object.keys(data.match_detail).length == match_count || --count == 0) {
-                            finish_getting_data(); 
-                        } else {
-                            console.log(count);
-                        }
+                        });
+
+                    } else if (--count == 0) {
+                        finish_getting_data(); 
                     }
                 }
             }
 
-            function get_match_detail(match_detail_option, callback) {
+            // Return match info after requesting it.
+            function get_match_detail(matchId, callback) {
+
+                // TODO > check if match id is on the database, else query for it
+                var match_detail_option = 
+                {
+                    url: config.URL_MATCH_BY_ID, 
+                    headers: {
+                        "X-Riot-Token": RIOT_KEY
+                    }
+                }
+                match_detail_option.url = match_detail_option.url.replace( "{matchId}", matchId);
+
+                // Request timeline info
                 request(match_detail_option, function(error_match, response_match, data_match) {
+                    // Parse Timeline
                     var match_obj = JSON.parse(data_match);
-                    
+
+                    // If timeline was not returned ok try again 1.5 seconds later
                     if (match_obj.status !== undefined) {
                         setTimeout(function() {
-                            get_match_detail(match_detail_option, callback);
+                            get_match_detail(matchId, callback);
                         }, 1500)
-                    } else if (match_obj.gameCreation >= date) {
+                    
+                    // If timeline was return and gameCreation date is inside the time frame
+                    } else if (match_obj.gameCreation >= from_date || match_obj.gameCreation <= to_date ) {
                         callback(null, match_obj);
+
+                    // If not in the timeframe
                     } else {
-                        if (Object.keys(data.match_detail).length == match_count || --count == 0) {
+                        if (--count == 0) {
                             finish_getting_data(); 
                         }
                     }
@@ -140,7 +146,7 @@ exports.matches_get_data_by_name = function(req, res, next) {
                             'data': data,
                             'champions' : data_champions,
                             'matches': match_count,
-                            'date_in_milliseconds': date
+                            'date_in_milliseconds': from_date
                         });
                 });
             }

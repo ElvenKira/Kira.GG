@@ -1,13 +1,5 @@
-const DATABASE_NAME = "KiraApp";
-//const DB_USERNAME = "app_user";
-const DB_USERNAME = "kira";
-//const DB_PASSWORD = "test1234";
-const DB_PASSWORD = "saphire6.";
-//const DB_URL      = "mongodb://" + DB_USERNAME + ":" + DB_PASSWORD + "@localhost:27017/" + DATABASE_NAME;
-const DB_URL      = "mongodb://localhost:27017";
 const LOL_VERSION = "8.4.1";
 const DRAGONTAIL_URL = "https://ddragon.leagueoflegends.com/cdn/dragontail-" + LOL_VERSION + ".tgz";
-const RIOT_KEY = "RGAPI-e208770e-2fbe-454f-8428-26214c96b5a6";
 const REGION = "la2";
 const BASE_URL                = "https://" + REGION + ".api.riotgames.com";
 const URL_CHAMPIONS           = BASE_URL + "/lol/static-data/v3/champions?locale=en_US&champListData=all&tags=all&dataById=false";
@@ -43,13 +35,8 @@ const URL_GET_CHAMPION_MASTERY_BY_CHAMP    = BASE_URL + "/lol/champion-mastery/v
 const URL_GET_CHAMPION_MASTERY_TOTAL_SCORE = BASE_URL + "/lol/champion-mastery/v3/scores/by-summoner/{summonerId}";
 
 module.exports = {
-    DATABASE_NAME,
-    DB_USERNAME,
-    DB_PASSWORD,
     LOL_VERSION,
     DRAGONTAIL_URL,
-    DB_URL,
-    RIOT_KEY,
     URL_CHAMPIONS,
     URL_ITEMS,
     URL_LANGUAGE_STRINGS,

@@ -1,5 +1,6 @@
 var request = require('request');
 var fs = require('fs');
+const keys = require('../config/keys');
 
 exports.get_static_profile_icons = function(req, res) {
     console.log("Into the function");
@@ -7,7 +8,7 @@ exports.get_static_profile_icons = function(req, res) {
     var options = {
         url: 'https://na1.api.riotgames.com/lol/static-data/v3/profile-icons?locale=en_US', 
         headers: {
-            "X-Riot-Token": "RGAPI-48f0f14c-d30e-456f-b97d-33239506b802"
+            "X-Riot-Token": keys.RIOT_KEY
         }
     };
 
@@ -39,7 +40,7 @@ exports.get_static_champions = function(req, res) {
     var options = {
         url: 'https://na1.api.riotgames.com/lol/static-data/v3/profile-icons?locale=en_US', 
         headers: {
-            "X-Riot-Token": "RGAPI-48f0f14c-d30e-456f-b97d-33239506b802"
+            "X-Riot-Token": keys.RIOT_KEY
         }
     };
 

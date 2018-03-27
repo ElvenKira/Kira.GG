@@ -1,5 +1,6 @@
 var request = require('request');
 var config = require('../config');
+const keys = require('../config/keys');
 
 exports.summoner_get_data_by_name = function(req, res, next) {
     //var summoner = req.params.summoner_name;
@@ -10,7 +11,7 @@ exports.summoner_get_data_by_name = function(req, res, next) {
     var options = {
         url: config.URL_SUMMONER_BY_NAME + summoner, 
         headers: {
-            "X-Riot-Token": config.RIOT_KEY
+            "X-Riot-Token": keys.RIOT_KEY
         }
     }
 

@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const keys = require('./config/keys');
 
 var app = express();
 
@@ -45,10 +46,9 @@ app.use(function(err, req, res, next) {
 
 var PORT = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     IP   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
-    mongoURLLabel = "",
+    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL || keys.DATABASE_URL,
     databaseServiceName = process.env.DATABASE_SERVICE_NAME || 'MONGODB',
-    mongoDatabase = process.env.DATABASE_NAME || 'KiraApp';
+    mongoDatabase = process.env.DATABASE_NAME || keys.DATABASE_NAME;
 
     console.log("PORT: " + PORT);
     console.log("IP: " + IP);
@@ -76,7 +76,6 @@ if (mongoURL == null && databaseServiceName) {
   }
 }
 
-console.log("before trying to connect");
 MongoClient.connect(mongoURL, function(err, db) {
   console.log("\n\nMONGO URL: " + mongoURL);
   if (err) {

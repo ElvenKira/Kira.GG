@@ -1,12 +1,12 @@
 var request = require('request');
-
 var config = require('../config');
+const keys = require('../config/keys');
 
 exports.download_game_data = function(req, res, next) {
     var options = {
         url: 'https://la2.api.riotgames.com/lol/summoner/v3/summoners/by-name/'+ summoner, 
         headers: {
-            "X-Riot-Token": config.RIOT_KEY
+            "X-Riot-Token": keys.RIOT_KEY
         }
     }
     var db = req.app.locals.db;

@@ -28,6 +28,8 @@ block content
 							- var headers = ['Champion', 'W/L', 'Game Lenght', 'Kills', 'Deaths', 'Assists', 'Gold', 'CS', 'CS/Min', 'Wards Placed', 'Control Wards', 'Time Ago'];
 							while n < matches + 1
 								th= n++
+						//p #{JSON.stringify(data.summoner)}
+						//p #{JSON.stringify(data.match_detail)}
 						tbody
 							each header, index_headers in headers
 								tr
@@ -38,7 +40,7 @@ block content
 											- entry = data.match_detail[key]
 											if (entry.participantIdentities !== undefined)
 												each participantIdentity, j in entry.participantIdentities
-													if participantIdentity.player.accountId == data.summoner.accountId
+													if participantIdentity.player.summonerId == data.summoner.id
 														case index_headers
 															when 0
 																td #{ champions.keys[entry.participants[j].championId]}
@@ -70,5 +72,7 @@ block content
 																	td #{ Math.ceil(milliseconds / (1000 * 60 * 60 * 24)) } days ago
 																else
 																	td #{ Math.ceil(((new Date).getTime() - entry.gameCreation) / (1000 * 60 * 60)) } hours ago
+															default
+																td default case
 											else
 												td -

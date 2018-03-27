@@ -11,23 +11,23 @@ exports.matches_get_data_by_name = function(req, res, next) {
 
     switch(req.body.role) {
         case "ADC":
-            lane = "BOTTOM";
+            lane = ["BOTTOM", "NONE"];
             role = "DUO_CARRY";
             break;
         case "Support":
-            lane = "BOTTOM";
+            lane = ["BOTTOM", "NONE"];
             role = "DUO_SUPPORT";
             break;
         case "Mid":
-            lane = "MIDDLE";
+            lane = ["MIDDLE"];
             role = "SOLO";
             break;
         case "Top":
-            lane = "TOP";
+            lane = ["TOP"];
             role = "SOLO";
             break;
         case "Jungle":
-            lane = "JUNGLE";
+            lane = ["JUNGLE"];
             role = "NONE";
             break;
         case "Any":
@@ -94,7 +94,8 @@ exports.matches_get_data_by_name = function(req, res, next) {
 
             
             function process_data(match_data, count) {
-                if (output_records >= match_count || count >= match_data.length) {
+                if (output_records >= match_count ||
+                    count >= match_data.length) {
                     req.app.db.collection('champions').findOne({}, function(err, data_champions) {
                         res.render('matches_data', 
                         {
@@ -104,7 +105,7 @@ exports.matches_get_data_by_name = function(req, res, next) {
                         });
                     });
                 } else {
-                    if (lane == "ANY" || (data.matches.matches[count - 1].lane.localeCompare(lane) == 0 && data.matches.matches[count - 1].role.localeCompare(role) == 0)) 
+                    if (lane == "ANY" || lane.indexOf(data.matches.matches[count - 1].lane) >= 0 && data.matches.matches[count - 1].role.localeCompare(role) == 0)
                     {
                         // TODO > check if match id is on the database, else query for it
                         var match_detail_option = { url: config.URL_MATCH_BY_ID, headers: {"X-Riot-Token": RIOT_KEY}};
@@ -127,6 +128,7 @@ exports.matches_get_data_by_name = function(req, res, next) {
 
                                 var limitCount = response_match["headers"]["x-app-rate-limit-count"].split(",");
                                 if (output_records < match_count && match_data.length > count) {
+                                    //console.log("Added! now " + Object.keys(data.match_detail).length);
                                     if (limitCount[0] == "20:1") {
                                         setTimeout(function() {
                                             process_data(match_data, ++count);

@@ -1,43 +1,47 @@
 extends layout.pug
 
 block content
-	div(class="container")
-		nav(class="navbar navbar-toggleable-md navbar-light bg-faded")
-			h1 
-				a(href="/") Kira.GG
-			//button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
-			//form(action="/summoner/data" method="post" class="form-inline")
-			//	input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
-			//	select(name="region")
-			//		option(value="LA1") LAN
-			//		option(value="LA2") LAS
-			//	button(type="submit" class="btn btn-primary") Search			
-		div(class="row")
-			form(action="/matches/" method="post")
-				label(for="name") Summoner Name:
-				input(type="text" class="form-control" id="name" name="summoner_name" placeholder="Summoner Name" value="xcrow darkness")
-				br
-				label(for="role") Role:
-				select(name="role" id="role" class="form-control")
-					option(value="ADC") ADC
-					option(value="Support") Support
-					option(value="Mid") Mid
-					option(value="Top") Top
-					option(value="Jungle") Jungle
-					option(value="Any") Any
-				br
-				label(for="matches") Matches:
-				input(type="text" class="form-control" id="matches" name="matches" placeholder="25" value="25")
-				br
-				label(for="from_date" ) Date From:
-				input(type="date" id="from_date" name="from_date" class="form-control")
-				br
-				label(for="to_date") Date To:
-				input(type="date" id="to_date" name="to_date" class="form-control")
-				br
-				label(for="region") Region:
-				select(name="region" id="region" class="form-control")
-					option(value="LA2") LAS
-					option(value="LA1") LAN
-				br
-				button(type="submit" class="btn btn-primary") Search
+		header
+			nav(class="navbar navbar-toggleable-md navbar-light bg-faded")
+				h1 
+					a(href="/") Kira.GG
+				button(class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+				//form(action="/summoner/data" method="post" class="form-inline")
+				//	input(type="text" class="form-control" id="summoner_name" name="summoner_name" placeholder="Summoner Name")
+				//	button(type="submit" class="btn btn-primary") Search
+		main
+			br
+			div(class="container jumbotron" style="background-color:#0F1525")
+				div(class="row ")
+					form(action="/matches/" method="post")
+						label(for="name") Summoner Name:
+						input(type="text" class="form-control" id="name" name="summoner_name" placeholder="Summoner Name" value="xcrow darkness")
+						br
+						label(for="role") Role:
+						select(name="role" id="role" class="form-control")
+							option(value="ADC") ADC
+							option(value="Support") Support
+							option(value="Mid") Mid
+							option(value="Top") Top
+							option(value="Jungle") Jungle
+							option(value="Any") Any
+						br
+						label(for="matches") Matches:
+						input(type="text" class="form-control" id="matches" name="matches" placeholder="25" value="25")
+						br
+						label(for="from_date" ) Date From:
+						input(type="date" id="from_date" name="from_date" class="form-control")
+						br
+						label(for="to_date") Date To:
+						input(type="date" id="to_date" name="to_date" class="form-control")
+						br
+						label(for="region") Region:
+						select(name="region" id="region" class="form-control")
+							option(value="LA2") LAS
+							option(value="LA1") LAN
+						br
+						button(type="submit" class="btn btn-primary") Search
+				div(class="row")
+					h2 It can take a while after hitting the Search button so please be patient.
+			
+				

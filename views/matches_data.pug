@@ -47,7 +47,7 @@ block content
 															when 1
 																td #{ entry.participants[j].stats.win ? "W" : "L" }
 															when 2
-																td #{ Math.floor( entry.gameDuration / 60) }:#{ entry.gameDuration % 60}
+																td #{ Math.floor( entry.gameDuration / 60) }:#{(entry.gameDuration % 60) < 10 ? 0 : ""}#{entry.gameDuration % 60}
 															when 3
 																td #{ entry.participants[j].stats.kills}
 															when 4
